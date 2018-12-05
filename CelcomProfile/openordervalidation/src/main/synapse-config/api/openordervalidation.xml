@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/order/v1" name="openordervalidation" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST" uri-template="/openordervalidation">
+        <inSequence>
+            <log description="Before Transformation" level="full">
+                <property expression="json-eval($.inputOpenOrderValidationReq.orderType)" name="orderType"/>
+                <property expression="json-eval($.inputOpenOrderValidationReq.accountLocation)" name="accountLocation"/>
+                <property expression="json-eval($.inputOpenOrderValidationReq.serialNumber)" name="serialNumber"/>
+            </log>
+            <property expression="json-eval($.inputOpenOrderValidationReq.serialNumber)" name="serialNumber" scope="default" type="STRING"/>
+            <filter description="" regex="^$" source="get-property('serialNumber')">
+                <then>
+                    <log>
+                        <property name="property_name" value="Serialnumber not available in message- insquence"/>
+                    </log>
+                    <payloadFactory media-type="json">
+                        <format>{"outputOpenOrderValidationResp": $1}</format>
+                        <args>
+                            <arg literal="true" value="null"/>
+                        </args>
+                    </payloadFactory>
+                    <respond/>
+                </then>
+                <else>
+                    <log>
+                        <property name="property_name" value="Going to connect Endpoint-insquence"/>
+                    </log>
+                    <payloadFactory description="XMLPayload" media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:cel="http://www.siebel.com/xml/CELAssetMgmtIO" xmlns:cus="http://siebel.com/CustomUI" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Header/>
+                                <soapenv:Body>
+                                    <cus:CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS_Input>
+                                        <cus:SerialNumber>?</cus:SerialNumber>
+                                        <cel:ListOfCelassetmgmtio>
+                                            <!--Zero or more repetitions:-->
+                                            <cel:AssetMgmt-Asset>
+                                                <!--Optional:-->
+                                                <cel:OrderType>$1</cel:OrderType>
+                                                <!--Optional:-->
+                                                <cel:AccountLocation>$2</cel:AccountLocation>
+                                                <!--Optional:-->
+                                                <cel:SerialNumber>$3</cel:SerialNumber>
+                                            </cel:AssetMgmt-Asset>
+                                        </cel:ListOfCelassetmgmtio>
+                                    </cus:CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS_Input>
+                                </soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="json" expression="$.inputOpenOrderValidationReq.orderType" literal="true"/>
+                            <arg evaluator="json" expression="$.inputOpenOrderValidationReq.accountLocation" literal="true"/>
+                            <arg evaluator="json" expression="$.inputOpenOrderValidationReq.serialNumber" literal="true"/>
+                        </args>
+                    </payloadFactory>
+                    <log description="After Payload transformation" level="full"/>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/text+xml"/>
+                    <property name="HTTP_METHOD" scope="axis2" type="STRING" value="POST"/>
+                    <header name="SOAPAction" scope="transport" value="http://www.webserviceX.NET/GetWeather"/>
+                    <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+                    <send description="">
+                        <endpoint key="openordervalidationEndpoint"/>
+                    </send>
+                </else>
+            </filter>
+        </inSequence>
+        <outSequence>
+            <log>
+                <property name="property_name" value="Entering into OutSquence"/>
+            </log>
+            <xslt description="NameSpaceRemovalFromResponseXSLT" key="NameSpaceRemovalFromResponseXSLT"/>
+            <log>
+                <property expression="string(//CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS_Output/Error_spcMessage)" name="property_name"/>
+            </log>
+            <filter description="" regex="^$" source="string(//CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS_Output/Error_spcMessage)">
+                <then>
+                    <log>
+                        <property name="property_name" value="Success Path in Filter-OutSquence"/>
+                    </log>
+                    <xslt description="NameSpaceRemovalFromResponseXSLT" key="outputOpenOrderValidationRespXSLT"/>
+                    <log>
+                        <property name="outsequence" value="Message flow inside the outsequence"/>
+                    </log>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                </then>
+                <else>
+                    <log>
+                        <property name="property_name" value="Failure Path in Filter-OutSquence"/>
+                    </log>
+                    <property name="messageId" scope="default" type="STRING" value="SVC00022"/>
+                    <property expression="string(//CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS_Output/Error_spcMessage)" name="text" scope="default" type="STRING"/>
+                    <sequence key="ErrorResponseSequence"/>
+                </else>
+            </filter>
+            <send/>
+        </outSequence>
+        <faultSequence>
+            <log category="ERROR" description="Entering Error Sequence" level="full">
+                <property name="Entering_error_seq" value="Entering Error Sequence"/>
+            </log>
+            <property name="messageId" scope="default" type="STRING" value="SVC00010 - SBL-BPR-00131"/>
+            <property name="text" scope="default" type="STRING" value="Operation Error: 'OrderId' is invalid data. [Err40051](SBL-BPR-00131)"/>
+            <sequence description="" key="ErrorResponseSequence"/>
+            <respond/>
+        </faultSequence>
+    </resource>
+</api>

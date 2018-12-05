@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localEntry key="outputOpenOrderValidationRespXSLT" xmlns="http://ws.apache.org/ns/synapse">
+    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:template match="CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS_Output">
+            <outputOpenOrderValidationResp>
+                <xsl:apply-templates select="@*|node()"/>
+            </outputOpenOrderValidationResp>
+        </xsl:template>
+        <xsl:template match="CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS_Output/CELOpenOrderFlag">
+            <openOrderFlag>
+                <xsl:apply-templates select="@*|node()"/>
+            </openOrderFlag>
+        </xsl:template>
+        <xsl:template match="CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS_Output/OrderNumber">
+            <orderNumber>
+                <xsl:apply-templates select="@*|node()"/>
+            </orderNumber>
+        </xsl:template>
+        <xsl:template match="CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS_Output/OutletId">
+            <outletId>
+                <xsl:apply-templates select="@*|node()"/>
+            </outletId>
+        </xsl:template>
+        <xsl:template match="CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS_Output/SerialNumber">
+            <serialNumber>
+                <xsl:apply-templates select="@*|node()"/>
+            </serialNumber>
+        </xsl:template>
+        <xsl:template match="CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS_Output/Source">
+            <source>
+                <xsl:apply-templates select="@*|node()"/>
+            </source>
+        </xsl:template>
+        <xsl:template match="CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS_Output/Status">
+            <status>
+                <xsl:apply-templates select="@*|node()"/>
+            </status>
+        </xsl:template>
+    </xsl:stylesheet>
+</localEntry>

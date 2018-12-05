@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoint name="openordervalidationEndpoint" xmlns="http://ws.apache.org/ns/synapse">
+    <wsdl port="CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS" service="CEL_spcATG_spcOrder_spcCheck_spcWorkflow_spcWS" uri="http://sit5-osb.celcom.com.my:8101/Telco_OSB_Impl/ATGOpenOrderValidationWSDLReceiver?WSDL"/>
+</endpoint>

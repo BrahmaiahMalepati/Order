@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="openordervalidation" groupId="com.example.openordervalidation.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/openordervalidation.xml</file>
+    </artifact>
+    <artifact name="openordervalidationEndpoint" groupId="com.example.openordervalidation.endpoint" version="1.0.0" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/openordervalidationEndpoint.xml</file>
+    </artifact>
+    <artifact name="NameSpaceRemovalFromResponseXSLT" groupId="com.example.openordervalidation.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/NameSpaceRemovalFromResponseXSLT.xml</file>
+    </artifact>
+    <artifact name="ErrorResponseSequence" groupId="com.example.openordervalidation.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/ErrorResponseSequence.xml</file>
+    </artifact>
+    <artifact name="outputOpenOrderValidationRespXSLT" groupId="com.example.openordervalidation.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/outputOpenOrderValidationRespXSLT.xml</file>
+    </artifact>
+</artifacts>
